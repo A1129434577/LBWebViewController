@@ -38,7 +38,7 @@
     // Do any additional setup after loading the view.
     self.title = self.customTitle;
     //导航栏自定义的话UIScrollView内容将不实用系统的自动向下偏移
-    if ([self.navigationController.navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault] || !self.navigationController.navigationBar.translucent) {
+    if ([self.navigationController.navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault] || !self.navigationController.navigationBar.isTranslucent) {
         _webView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-CGRectGetMaxY(self.navigationController.navigationBar.frame));
         _loadingProgressView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 8);
     }else{

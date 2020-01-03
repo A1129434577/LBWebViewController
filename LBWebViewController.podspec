@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "LBWebViewController"
-  spec.version      = "1.0.0"
+  spec.version      = "1.0.1"
   spec.summary      = "带有加载进度条、网页来源的WKWebView。"
   spec.description  = "带有加载进度条、网页来源的WKWebView。"
   spec.homepage     = "https://github.com/A1129434577/LBWebViewController"
