@@ -12,8 +12,6 @@
 		40E21078233DD14A00BD7929 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40E21076233DD14A00BD7929 /* LaunchScreen.storyboard */; };
 		40E2107B233DD14A00BD7929 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E2107A233DD14A00BD7929 /* main.m */; };
 		40E21082233DD18C00BD7929 /* LBWebViewController.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 40E21081233DD18C00BD7929 /* LBWebViewController.podspec */; };
-		40E21088233DD19600BD7929 /* ic_forward.png in Resources */ = {isa = PBXBuildFile; fileRef = 40E21085233DD19600BD7929 /* ic_forward.png */; };
-		40E21089233DD19600BD7929 /* ic_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 40E21086233DD19600BD7929 /* ic_back.png */; };
 		40E2108A233DD19600BD7929 /* LBWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E21087233DD19600BD7929 /* LBWebViewController.m */; };
 		40E2108D233DD6C300BD7929 /* ExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E2108C233DD6C300BD7929 /* ExampleViewController.m */; };
 /* End PBXBuildFile section */
@@ -28,8 +26,6 @@
 		40E2107A233DD14A00BD7929 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		40E21081233DD18C00BD7929 /* LBWebViewController.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LBWebViewController.podspec; sourceTree = "<group>"; };
 		40E21084233DD19600BD7929 /* LBWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBWebViewController.h; sourceTree = "<group>"; };
-		40E21085233DD19600BD7929 /* ic_forward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_forward.png; sourceTree = "<group>"; };
-		40E21086233DD19600BD7929 /* ic_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_back.png; sourceTree = "<group>"; };
 		40E21087233DD19600BD7929 /* LBWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBWebViewController.m; sourceTree = "<group>"; };
 		40E2108B233DD6C300BD7929 /* ExampleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExampleViewController.h; sourceTree = "<group>"; };
 		40E2108C233DD6C300BD7929 /* ExampleViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExampleViewController.m; sourceTree = "<group>"; };
@@ -84,8 +80,6 @@
 			children = (
 				40E21084233DD19600BD7929 /* LBWebViewController.h */,
 				40E21087233DD19600BD7929 /* LBWebViewController.m */,
-				40E21085233DD19600BD7929 /* ic_forward.png */,
-				40E21086233DD19600BD7929 /* ic_back.png */,
 			);
 			path = LBWebViewController;
 			sourceTree = SOURCE_ROOT;
@@ -147,9 +141,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				40E21089233DD19600BD7929 /* ic_back.png in Resources */,
 				40E21078233DD14A00BD7929 /* LaunchScreen.storyboard in Resources */,
-				40E21088233DD19600BD7929 /* ic_forward.png in Resources */,
 				40E21075233DD14A00BD7929 /* Assets.xcassets in Resources */,
 				40E21082233DD18C00BD7929 /* LBWebViewController.podspec in Resources */,
 			);

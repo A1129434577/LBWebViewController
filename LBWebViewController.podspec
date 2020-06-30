@@ -10,6 +10,5 @@ Pod::Spec.new do |spec|
   spec.ios.deployment_target = '8.0'
   spec.source       = { :git => 'https://github.com/A1129434577/LBWebViewController.git', :tag => spec.version.to_s }
   spec.source_files = "LBWebViewController/**/*.{h,m}"
-  spec.resource     = "LBWebViewController/**/*.png"
   spec.requires_arc = true
 end

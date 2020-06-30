@@ -9,6 +9,7 @@
 #import "LBWebViewController.h"
 
 @interface LBWebViewController ()
+@property (nonatomic, strong) CATextLayer *hostLPromptLayer;
 @end
 
 @implementation LBWebViewController
@@ -49,6 +50,7 @@
     [self.view addSubview:_loadingProgressView];
     
     CATextLayer *hostLPromptLayer = [[CATextLayer alloc] init];
+    hostLPromptLayer.backgroundColor = [UIColor cyanColor].CGColor;
     hostLPromptLayer.frame = CGRectMake(0, 0, CGRectGetWidth(_webView.bounds), 20);
     hostLPromptLayer.wrapped = YES;
     hostLPromptLayer.contentsScale = [UIScreen mainScreen].scale;
@@ -63,6 +65,7 @@
     hostLPromptLayer.foregroundColor = [UIColor grayColor].CGColor;
     hostLPromptLayer.alignmentMode = kCAAlignmentCenter;
     [self.webView.scrollView.layer insertSublayer:hostLPromptLayer atIndex:0];
+    _hostLPromptLayer = hostLPromptLayer;
 }
 
 -(void)setCustomTitle:(NSString *)customTitle{
@@ -103,29 +106,10 @@
         decisionHandler(WKNavigationActionPolicyCancel);
     }else{
         if (_showSource) {
-            CATextLayer *hostLPromptLayer = (CATextLayer *)[webView.scrollView.layer.sublayers firstObject];
-            hostLPromptLayer.string = [NSString stringWithFormat:@"网页由 %@ 提供",navigationAction.request.URL.host];
+            _hostLPromptLayer.string = [NSString stringWithFormat:@"网页由 %@ 提供",navigationAction.request.URL.host];
         }
         decisionHandler(WKNavigationActionPolicyAllow);
     }
-}
-
-
-
--(UIImage *)changeImage:(UIImage *)image toColor:(UIColor *)color
-{
-    UIGraphicsBeginImageContextWithOptions(image.size, NO, image.scale);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextTranslateCTM(context, 0, image.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
-    CGContextSetBlendMode(context, kCGBlendModeNormal);
-    CGRect rect = CGRectMake(0, 0, image.size.width, image.size.height);
-    CGContextClipToMask(context, rect, image.CGImage);
-    [color setFill];
-    CGContextFillRect(context, rect);
-    UIImage*newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
 }
 
 -(void)dealloc{
