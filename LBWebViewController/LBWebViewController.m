@@ -8,8 +8,8 @@
 
 #import "LBWebViewController.h"
 
-@interface LBWebViewController ()
-@property (nonatomic, strong) CATextLayer *hostLPromptLayer;
+@interface LBWebViewController ()<UIScrollViewDelegate>
+@property (nonatomic, strong) UILabel *hostLPromptLabel;
 @end
 
 @implementation LBWebViewController
@@ -18,6 +18,7 @@
     self = [super init];
     if (self) {
         _webView = [[WKWebView alloc] init];
+        _webView.scrollView.delegate = self;
         if (@available(iOS 13.0, *)) {
             self.webView.layer.backgroundColor = [UIColor systemGroupedBackgroundColor].CGColor;
         } else {
@@ -30,6 +31,11 @@
         self.loadingProgressView.progressTintColor = [UIColor greenColor];
         self.loadingProgressView.trackTintColor = [UIColor whiteColor];
 
+        if (@available(iOS 11.0, *)) {
+            _webView.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        } else {
+            self.automaticallyAdjustsScrollViewInsets = NO;
+        }
     }
     return self;
 }
@@ -38,41 +44,31 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = self.customTitle;
-    //导航栏自定义的话UIScrollView内容将不实用系统的自动向下偏移
-    if ([self.navigationController.navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault] || !self.navigationController.navigationBar.isTranslucent) {
-        _webView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-CGRectGetMaxY(self.navigationController.navigationBar.frame));
-        _loadingProgressView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 8);
-    }else{
-        _webView.frame = self.view.bounds;
-        _loadingProgressView.frame = CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), CGRectGetWidth(self.view.bounds), 8);
-    }
-    [self.view addSubview:_webView];
-    [self.view addSubview:_loadingProgressView];
     
-    CATextLayer *hostLPromptLayer = [[CATextLayer alloc] init];
-    hostLPromptLayer.backgroundColor = [UIColor cyanColor].CGColor;
-    hostLPromptLayer.frame = CGRectMake(0, 0, CGRectGetWidth(_webView.bounds), 20);
-    hostLPromptLayer.wrapped = YES;
-    hostLPromptLayer.contentsScale = [UIScreen mainScreen].scale;
-
-    UIFont *font = [UIFont systemFontOfSize:12];
-    CFStringRef fontName = (__bridge CFStringRef)font.fontName;
-    CGFontRef fontRef = CGFontCreateWithFontName(fontName);
-    hostLPromptLayer.font = fontRef;
-    hostLPromptLayer.fontSize = font.pointSize;
-    CGFontRelease(fontRef);
-
-    hostLPromptLayer.foregroundColor = [UIColor grayColor].CGColor;
-    hostLPromptLayer.alignmentMode = kCAAlignmentCenter;
-    [self.webView.scrollView.layer insertSublayer:hostLPromptLayer atIndex:0];
-    _hostLPromptLayer = hostLPromptLayer;
+    _webView.frame = CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-CGRectGetMaxY(self.navigationController.navigationBar.frame));
+        _loadingProgressView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 8);
+    [_webView addSubview:_loadingProgressView];
+    [self.view addSubview:_webView];
+    
+    CGFloat safeAreaInsetsTop = 0;
+    if (@available(iOS 11, *)) {
+        safeAreaInsetsTop = _webView.scrollView.safeAreaInsets.top;
+    }
+    UILabel *hostLPromptLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_webView.bounds), 40)];
+    hostLPromptLabel.alpha = 0;
+    hostLPromptLabel.backgroundColor = [UIColor clearColor];
+    hostLPromptLabel.font = [UIFont systemFontOfSize:12];
+    hostLPromptLabel.textColor = [UIColor grayColor];
+    hostLPromptLabel.textAlignment = NSTextAlignmentCenter;
+    [_webView addSubview:hostLPromptLabel];
+    _hostLPromptLabel = hostLPromptLabel;
 }
-
+#pragma mark setter
 -(void)setCustomTitle:(NSString *)customTitle{
     _customTitle = customTitle;
     self.title = customTitle;
 }
-
+#pragma mark KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([keyPath isEqualToString:NSStringFromSelector(@selector(estimatedProgress))]) {
@@ -82,6 +78,7 @@
     }
 }
 
+#pragma mark WKNavigationDelegate
 //页面开始加载
 -(void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation{
     _loadingProgressView.hidden = NO;
@@ -106,9 +103,18 @@
         decisionHandler(WKNavigationActionPolicyCancel);
     }else{
         if (_showSource) {
-            _hostLPromptLayer.string = [NSString stringWithFormat:@"网页由 %@ 提供",navigationAction.request.URL.host];
+            _hostLPromptLabel.text = [NSString stringWithFormat:@"网页由 %@ 提供",navigationAction.request.URL.host];
         }
         decisionHandler(WKNavigationActionPolicyAllow);
+    }
+}
+
+#pragma mark UIScrollViewDelegate
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.y < -CGRectGetHeight(_hostLPromptLabel.frame)) {
+        _hostLPromptLabel.alpha = -(scrollView.contentOffset.y/(CGRectGetHeight(_hostLPromptLabel.frame)*5));
+    }else{
+        _hostLPromptLabel.alpha = 0;
     }
 }
 
